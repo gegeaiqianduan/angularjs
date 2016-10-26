@@ -1,0 +1,42 @@
+<div class="container marketing" style="font-size: 12px;text-align: center;">
+
+      <!-- Three columns of text below the carousel -->
+      <div class="row"  ng-repeat='food in foodLists' ng-if='$index % 3== 0'>
+        <div class="col-lg-4" ng-if='foodLists[$index].id != undefined'>
+
+          <img class="img-circle" ng-src="{{foodPrefix}}{{foodLists[$index].img}}" alt="{{foodLists[$index].keywords}}" style="width: 140px; height: 140px;">
+          <h2>{{foodLists[$index].name}}</h2>
+          <p>{{foodLists[$index].description | limitTo:30}}</p>
+          <p><a class="btn btn-default" href="#/navbar/foodDetail/{{foodLists[$index].id}}" role="button">查看详情 &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+     
+        <div class="col-lg-4" ng-if='foodLists[$index+1].id != undefined'>
+          <img class="img-circle" ng-src="{{foodPrefix}}{{foodLists[$index+1].img}}" alt="{{foodLists[$index+1].keywords}}" style="width: 140px; height: 140px;">
+          <h2>{{foodLists[$index+1].name}}</h2>
+          <p>{{foodLists[$index+1].description | limitTo:30}}</p>
+          <p><a class="btn btn-default" href="#/navbar/foodDetail/{{foodLists[$index+1].id}}" role="button">查看详情 &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+       
+       <div class="col-lg-4" ng-if='foodLists[$index+2].id != undefined'>
+
+          <img class="img-circle" ng-src="{{foodPrefix}}{{foodLists[$index+2].img}}" alt="{{foodLists[$index+2].keywords}}" style="width: 140px; height: 140px;">
+          <h2>{{foodLists[$index+2].name}}</h2>
+          <p>{{foodLists[$index+2].description | limitTo:30}}</p>
+          <p><a class="btn btn-default" href="#/navbar/foodDetail/{{foodLists[$index+2].id}}" role="button">查看详情 &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+
+
+      </div><!-- /.row -->
+</div>
+<nav>
+  <ul class="pagination">
+	  <li ui-sref-active="active" ng-repeat='p in foodListsPageCount'><a href="#/navbar/foodList/{{foodCateID}}/{{p}}">{{p}}</a></li>
+    <!-- <li class="disabled"><a href="javascript:;">&laquo;</a></li>
+    <li class="active"><a href="javascript:;">1 <span class="sr-only">(current)</span></a></li>
+    <li><a href="javascript:;">2 <span class="sr-only">(current)</span></a></li>
+    <li><a href="javascript:;">3 <span class="sr-only">(current)</span></a></li>
+    <li><a href="javascript:;">4 <span class="sr-only">(current)</span></a></li>
+    <li><a href="javascript:;">... <span class="sr-only">(current)</span></a></li>
+	<li class="disabled"><a href="javascript:;">&raquo;</a></li> -->
+  </ul>
+</nav>

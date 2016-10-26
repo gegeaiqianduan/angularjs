@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Angular And Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+		body {
+		  	/*min-height: 2000px;*/
+		  	padding-top: 70px;
+		}
+	</style>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body ng-app="foodModule" style="height:auto!important;">
+	  
+	<ui-view></ui-view>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script>
+				/*!
+		 * IE10 viewport hack for Surface/desktop Windows 8 bug
+		 * Copyright 2014 Twitter, Inc.
+		 * Licensed under the Creative Commons Attribution 3.0 Unported License. For
+		 * details, see http://creativecommons.org/licenses/by/3.0/.
+		 */
+
+		// See the Getting Started docs for more information:
+		// http://getbootstrap.com/getting-started/#support-ie10-width
+
+		(function () {
+		  'use strict';
+		  if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+		    var msViewportStyle = document.createElement('style')
+		    msViewportStyle.appendChild(
+		      document.createTextNode(
+		        '@-ms-viewport{width:auto!important}'
+		      )
+		    )
+		    document.querySelector('head').appendChild(msViewportStyle)
+		  }
+		})();
+	</script>
+	<script src="js/angular.js" charset="utf-8"></script>
+	<script src="js/angular-ui-router.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		var foodApp = angular.module('foodModule',['ui.router'])
+		.run(function ($rootScope) {
+			$rootScope.foodPrefix = "http://tnfs.tngou.net/image";
+		})
+		.filter('trustAsHtml',function($sce){
+			return function (txt) {
+				return $sce.trustAsHtml(txt);
+			}
+		})
+		.config(function ($stateProvider,$urlMatcherFactoryProvider,$locationProvider,$urlRouterProvider) {
+			$urlMatcherFactoryProvider.caseInsensitive(true);
+			$urlRouterProvider.otherwise('/navbar');
+			$stateProvider
+			.state('navbar',{
+				url:'/navbar',
+				templateUrl:'template/navbar.html',
+				controller:'navbarController'
+			})
+			.state('navbar.home',{
+				url:'/home',
+				templateUrl:'template/home.html',
+				controller:'homeController'
+			})
+			.state('navbar.foodList',{
+				url:'/foodList/:id/:page',
+				templateUrl:'template/foodList.html',
+				controller:'foodListController'
+			})
+			.state('navbar.foodDetail',{
+				url:'/foodDetail/:id',
+				templateUrl:'template/foodDetail.html',
+				controller:'foodDetailController'
+			})
+			.state('navbar.im',{
+				url:'/im',
+				templateUrl:'template/im.html',
+				controller:'imController'
+			})
+		})
+		.controller('navbarController',function ($scope,$http) {
+			$http({
+				url:'http://984639084.applinzi.com/php/index.php',
+				method:'get',
+			}).then(function (res) {
+				// console.table(res.data.tngou);
+				$scope.foodCategory = res.data.tngou;
+			})
+			$scope.navbarMsg = 'navbar';
+		})
+		.controller('homeController',function ($scope) {
+			$scope.homeMsg = 'home';
+		})
+		.controller('foodListController',function ($scope,$http,$stateParams) {
+			var rows = 30,
+				params = {      //设置传入的参数,id是分类id，page为第几页，rows是每页记录数。
+					id:$stateParams.id,
+					page:$stateParams.page,
+					rows:rows
+				};
+			$http({
+				url:'http://984639084.applinzi.com/php/list.php',
+				method:'get',
+				params:params
+			}).then(function (res) {
+				$scope.foodLists = res.data.tngou;     //列表
+				$scope.foodCateID = $stateParams.id;   //分类id
+				var len = Math.ceil(res.data.total/rows); //确定页数,但foodlistpagecount是数值，不是对象，所以要转成对象。
+				var pageCountList = [];
+				for(var i=1;i<=len;i++){
+					pageCountList.push(i);
+				}
+				$scope.foodListsPageCount = pageCountList;
+				// console.log(res);
+				// var data = res.data.tngou;
+				// var len = res.data.tngou.length;
+				// var arr = [];
+				// for(var i=0,l=len;i<l;i+=3){
+				// 	arr.push(data.splice(0,3));
+				// }
+				// console.log(arr);
+			})
+			// console.log($stateParams);
+		})
+		.controller('foodDetailController',function ($scope,$http,$stateParams,$sce) {
+			var params = {
+				id: $stateParams.id
+			}
+			$http({
+				url:'http://984639084.applinzi.com/php/detail.php',
+				method:'get',
+				params:params
+			}).then(function (res) {
+				$scope.foodDetail = res.data;
+				var str = res.data.message;
+				$scope.message = $sce.trustAsHtml(str);
+			})
+		})
+		.controller('imController',function($scope,$http){
+			$scope.myinfo = '你好漂亮！';
+			$scope.send = function () {
+				$http({
+					url:'http://984639084.applinzi.com/php/robot.php',
+					method:'get',
+					params:{
+						info:$scope.myinfo
+					}
+				}).then(function (res) {	
+					$scope.text = res.data.text;
+					var msg = msg_input.value;
+					var li = document.createElement('li');
+					li.className = "msgContent right";
+					li.innerHTML = msg;
+					var div = document.createElement('div');
+					div.style.clear = "both";
+					content.appendChild(div);
+					content.appendChild(li);
+					var li2 = document.createElement('li');
+					li2.className = "msgContent left";
+					li2.style.backgroundColor ='#'+ parseInt(Math.random()*10)+ parseInt(Math.random()*10)+ parseInt(Math.random()*10)+ parseInt(Math.random()*10)+ parseInt(Math.random()*10)+ parseInt(Math.random()*10);
+					li2.innerHTML = $scope.text;
+					var div2 = document.createElement('div');
+					var cleardiv = document.createElement('div');
+					cleardiv.style.clear = "both";
+					content.appendChild(cleardiv);
+					content.appendChild(div2);
+					content.appendChild(li2);
+					li.scrollIntoView();
+					$scope.myinfo = '';
+				})
+				
+			}
+			$scope.keysend = function (e) {
+				var e = window.event || e;
+				console.log(e);
+				if (e.keyCode == 13) {
+					$scope.send();
+				} else if (e.keyCode == 13 && e.ctrlKey) {
+					$scope.send();
+				}
+			}
+			
+		})
+	</script>
+  </body>
+</html>

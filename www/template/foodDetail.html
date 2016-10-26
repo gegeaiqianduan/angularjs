@@ -1,0 +1,10 @@
+<div class="row featurette" >
+	<div class="col-md-5">
+	  <img class="featurette-image img-responsive" ng-src="{{foodPrefix}}{{foodDetail.img}}" alt="{{foodDetail.keywords}}}">
+	</div>
+    <div class="col-md-7">
+      <h2 class="featurette-heading">{{foodDetail.name}}<span class="text-muted" style="font-size:20px;">{{foodDetail.food}}</span></h2>
+      <p class="lead">{{foodDetail.description}}</p>
+      <p class="lead" ng-bind-html='message'></p>
+    </div>
+</div>
