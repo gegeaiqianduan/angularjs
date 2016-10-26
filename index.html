@@ -102,7 +102,7 @@
 		})
 		.controller('navbarController',function ($scope,$http) {
 			$http({
-				url:'http://984639084.applinzi.com/php/index.php',
+				url:'https://984639084.applinzi.com/php/index.php',
 				method:'get',
 			}).then(function (res) {
 				// console.table(res.data.tngou);
@@ -121,7 +121,7 @@
 					rows:rows
 				};
 			$http({
-				url:'http://984639084.applinzi.com/php/list.php',
+				url:'https://984639084.applinzi.com/php/list.php',
 				method:'get',
 				params:params
 			}).then(function (res) {
@@ -149,7 +149,7 @@
 				id: $stateParams.id
 			}
 			$http({
-				url:'http://984639084.applinzi.com/php/detail.php',
+				url:'https://984639084.applinzi.com/php/detail.php',
 				method:'get',
 				params:params
 			}).then(function (res) {
@@ -162,7 +162,7 @@
 			$scope.myinfo = '你好漂亮！';
 			$scope.send = function () {
 				$http({
-					url:'http://984639084.applinzi.com/php/robot.php',
+					url:'https://984639084.applinzi.com/php/robot.php',
 					method:'get',
 					params:{
 						info:$scope.myinfo
