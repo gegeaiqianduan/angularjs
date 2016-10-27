@@ -102,7 +102,7 @@
 		})
 		.controller('navbarController',function ($scope,$http) {
 			$http({
-				url:'https://984639084.applinzi.com/php/index.php',
+				url:'https://yanchengye.github.io/angularjs/php/index.php',
 				method:'get',
 			}).then(function (res) {
 				// console.table(res.data.tngou);
@@ -121,7 +121,7 @@
 					rows:rows
 				};
 			$http({
-				url:'https://984639084.applinzi.com/php/list.php',
+				url:'https://yanchengye.github.io/angularjs/php/list.php',
 				method:'get',
 				params:params
 			}).then(function (res) {
@@ -149,7 +149,7 @@
 				id: $stateParams.id
 			}
 			$http({
-				url:'https://984639084.applinzi.com/php/detail.php',
+				url:'https://yanchengye.github.io/angularjs/php/detail.php',
 				method:'get',
 				params:params
 			}).then(function (res) {
@@ -194,7 +194,7 @@
 			}
 			$scope.keysend = function (e) {
 				var e = window.event || e;
-				console.log(e);
+				//console.log(e);
 				if (e.keyCode == 13) {
 					$scope.send();
 				} else if (e.keyCode == 13 && e.ctrlKey) {
